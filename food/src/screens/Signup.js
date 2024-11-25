@@ -1,10 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+
 
 export default function Signup() {
+  const [credentials, setcredentials]= useState({name:"",email:"",password:"",geolocation:""})//defautl value
+  const handleSubmit=async(e)=>{
+    e.preventDefault()    //synthetc event
+    const response = await fetch("http://localhost:5000/api/createuser",{
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({name:credentials.name,email:credentials.email,password:credentials.password,location:credentials.geolocation})
+    })
+    const json=await response.json()
+    console.log(json);
+    if(!json.success){
+      alert("enter valed")
+    }
+  }
+  const onChange=(event)=>{
+    setcredentials({...credentials,[event.target.name]:event.target.value}) //state change ke leye value set krne ke leye pehel jo defaut valute the
+  }
   return (
     <div>
     <div className="d-flex justify-content-center align-items-center vh-100 bg-dark">
-      <form 
+      <form onSubmit={handleSubmit} 
         className="p-4 border rounded shadow-lg text-light"
         style={{ 
           width: '300px',
@@ -20,6 +41,9 @@ export default function Signup() {
             type="text" 
             className="form-control bg-dark text-light border-secondary" 
             id="exampleInputName" 
+            name='name'
+            value={credentials.name}
+            onChange={onChange}
           />
         </div>
         
@@ -30,6 +54,9 @@ export default function Signup() {
             className="form-control bg-dark text-light border-secondary" 
             id="exampleInputEmail1" 
             aria-describedby="emailHelp" 
+            name='email'
+            value={credentials.email}
+            onChange={onChange}
           />
         </div>
 
@@ -39,15 +66,21 @@ export default function Signup() {
             type="password" 
             className="form-control bg-dark text-light border-secondary" 
             id="exampleInputPassword1" 
+            name='password'
+            value={credentials.password}
+            onChange={onChange}
           />
         </div>
 
         <div className="mb-3">
-          <label htmlFor="exampleConfirmPassword" className="form-label">Confirm Password</label>
+          <label htmlFor="exampleConfirmPassword" className="form-label">location</label>
           <input 
-            type="password" 
+            type="text" 
             className="form-control bg-dark text-light border-secondary" 
-            id="exampleConfirmPassword" 
+            id="exampleConfirmPassword"
+            name='geolocation'
+            value={credentials.geolocation}
+            onChange={onChange} 
           />
         </div>
 
@@ -55,7 +88,7 @@ export default function Signup() {
         
         <div className="text-center mt-3">
           <span className="text-light">Already have an account? </span>
-          <a href="/login" className="text-primary text-decoration-none">Log in</a>
+          <Link to="/login" className="text-primary text-decoration-none">Log in</Link>
         </div>
       </form>
     </div>

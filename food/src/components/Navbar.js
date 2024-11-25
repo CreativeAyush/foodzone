@@ -19,10 +19,10 @@ export default function Navbar() {
           <Link className="nav-link" to="/login">login</Link>
 
         </li>
-        {/* <li className="nav-item">
+        <li className="nav-item">
           <Link className="nav-link" to="/signup">signup</Link>
 
-        </li> */}
+        </li>
       </ul>
     </div>
   </div>
